@@ -11,6 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Model\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Carple.Application\Carple.Application.csproj" />
     <ProjectReference Include="..\Carple.Insfrastructure\Carple.Insfrastructure.csproj" />
   </ItemGroup>
