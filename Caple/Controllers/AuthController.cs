@@ -22,7 +22,8 @@ namespace Caple.API.Controllers
             if (result == null)
                 return Unauthorized("Invalid credentials");
 
-<<<<<<< Updated upstream
+            return Ok(result);
+        }
         [HttpGet("info")]
         public IActionResult Info()
         {
@@ -32,9 +33,7 @@ namespace Caple.API.Controllers
         public IActionResult Name()
         {
             return Ok(new { Name = "Sanoof" });
-=======
-            return Ok(result);
->>>>>>> Stashed changes
+
         }
 
     }
