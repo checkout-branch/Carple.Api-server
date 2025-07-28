@@ -28,7 +28,7 @@ namespace Caple.API.Controllers
         [HttpGet("info")]
         public IActionResult Info()
         {
-            return Ok(new { Version = "1.0.0", Environment = "Production" });
+            return Ok(new { Version = "1.0.0", Environment = "Productin" });
         }
         [HttpGet("name")]
         public IActionResult Name()
