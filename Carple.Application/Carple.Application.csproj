@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Carple.Domain\Carple.Domain.csproj" />
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dto\" />
-    <Folder Include="Interfaces\" />
+    <ProjectReference Include="..\Carple.Domain\Carple.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Carple.Application.Dto;
+using Carple.Application.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Caple.API.Controllers
@@ -7,24 +9,20 @@ namespace Caple.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-
-        [HttpGet("ping")]
-        public IActionResult Ping()
+        private readonly IAuthService _authService;
+        public AuthController(IAuthService authService)
         {
-            return Ok("Pong");
-        }
-        [HttpGet("health")]
-        public IActionResult Health()
-        {
-            return Ok(new { Status = "Healthy" });
+            _authService = authService;
         }
 
-        [HttpGet("status")]
-        public IActionResult Status()
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            return Ok(new { Status = "Running" });
-        }
+            var result = await _authService.LoginAsync(dto);
+            if (result == null)
+                return Unauthorized("Invalid credentials");
 
+<<<<<<< Updated upstream
         [HttpGet("info")]
         public IActionResult Info()
         {
@@ -34,6 +32,9 @@ namespace Caple.API.Controllers
         public IActionResult Name()
         {
             return Ok(new { Name = "Sanoof" });
+=======
+            return Ok(result);
+>>>>>>> Stashed changes
         }
 
     }
