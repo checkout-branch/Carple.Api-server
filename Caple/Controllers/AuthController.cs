@@ -30,5 +30,11 @@ namespace Caple.API.Controllers
         {
             return Ok(new { Version = "1.0.0", Environment = "Production" });
         }
+        [HttpGet("name")]
+        public IActionResult Name()
+        {
+            return Ok(new { Name = "Sanoof" });
+        }
+
     }
 }
