@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 using Carple.Application.Dto;
 using Carple.Application.Interfaces;
 using Carple.Domain.Enities;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Dapper;
 namespace Carple.Insfrastructure.Services
 {
-   public class AuthService:IAuthService
+    public class AuthService : IAuthService
     {
         private readonly IAuthRepo _repo;
         private readonly IConfiguration _configuration;
@@ -22,27 +24,17 @@ namespace Carple.Insfrastructure.Services
             _repo = repo;
             _configuration = configuration;
         }
-        //public async Task<LoginResponseDto>LoginAsync(LoginDto dto)
-        //{
-        //    var user = await _repo.GetUserByEmailAsync(dto.Email);
-        //    if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
-        //        return null;
-        //    var token = GenerateJwtToken(user);
-        //    return new LoginResponseDto
-        //    {
-        //        Email = user.Email,
-        //        Token = token
-        //    };
-        //}
+  
+
         public async Task<LoginResponseDto> LoginAsync(LoginDto dto)
         {
             var user = await _repo.GetUserByEmailAsync(dto.Email);
 
-            // ✅ Compare directly (Plain-text comparison — for testing only)
-            if (user == null || user.PasswordHash != dto.Password)
+            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
                 return null;
 
             var token = GenerateJwtToken(user);
+
             return new LoginResponseDto
             {
                 Email = user.Email,
@@ -71,6 +63,39 @@ namespace Carple.Insfrastructure.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            return await _repo.GetUserByEmailAsync(email);
+        }
+
+        public async Task<string> RegisterAsync(RegisterDto dto)
+        {
+            var apiKey = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
+            var user = new User
+            {
+                FullName = dto.FullName,
+                Email = dto.Email,
+                PasswordHash = passwordHash,
+                Apikey = apiKey,
+                RoleId = 1
+            };
+
+            await _repo.RegisterUserAsync(user);
+            return apiKey;
+        }
+
+
+        public async Task<User> ValidateUserAsync(string email, string password)
+        {
+            using var connection = new SqlConnection(_configuration.GetConnectionString("Default"));
+            var query = "SELECT * FROM Users WHERE Email = @Email AND Password = @Password";
+            return await connection.QueryFirstOrDefaultAsync<User>(query, new { Email = email, Password = password });
+        }
+
+
     }
 }
 

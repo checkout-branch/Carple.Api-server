@@ -15,6 +15,15 @@ namespace Caple.API.Controllers
             _authService = authService;
         }
 
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto dto)
+        {
+            var apiKey = await _authService.RegisterAsync(dto);
+            return Ok(new { MasterApiKey = apiKey });
+        }
+
+
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {

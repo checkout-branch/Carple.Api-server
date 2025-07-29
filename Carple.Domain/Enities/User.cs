@@ -18,7 +18,7 @@ namespace Carple.Domain.Enities
         public int RoleId { get; set; }
 
         [ForeignKey("RoleId")]
-        public Role Role { get; set; } 
+        public Role Role { get; set; }
 
         [MaxLength(100)]
         public string FullName { get; set; }
@@ -63,5 +63,9 @@ namespace Carple.Domain.Enities
         public string Pincode { get; set; }
 
         public DateTime? CreatedAt { get; set; }
+
+        public bool IsBlocked { get; set; }
+
+        public string Apikey { get; set; }  
     }
 }

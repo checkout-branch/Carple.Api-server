@@ -10,5 +10,6 @@ namespace Carple.Application.Interfaces
    public interface IAuthRepo
     {
         Task<User> GetUserByEmailAsync(string email);
+        Task<int> RegisterUserAsync(User user);
     }
 }
