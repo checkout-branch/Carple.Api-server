@@ -1,4 +1,5 @@
 using System.Text;
+using Caple.API.Middleware;
 using Carple.Application.Interfaces;
 using Carple.Insfrastructure.Services;
 using Carple.Persistance.Repository;
@@ -84,6 +85,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseMiddleware<ApiKeyValidationMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
