@@ -41,8 +41,13 @@ namespace Caple.API.Controllers
         [HttpGet("name")]
         public IActionResult Name()
         {
-            return Ok(new { Name = "Sanoof" });
+            return Ok("");
 
+        }
+        [HttpGet("throw-generic")]
+        public IActionResult ThrowGeneric()
+        {
+            throw new Exception("Generic unhandled exception occurred.");
         }
 
     }
