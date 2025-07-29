@@ -10,9 +10,9 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 namespace Carple.Persistance.Repository
 {
-   public class AuthRepo:IAuthRepo
+    public class AuthRepo : IAuthRepo
     {
-        private readonly IConfiguration  _configuration;
+        private readonly IConfiguration _configuration;
         public AuthRepo(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -23,5 +23,13 @@ namespace Carple.Persistance.Repository
             var query = "SELECT * FROM Users WHERE Email = @Email";
             return await connection.QueryFirstOrDefaultAsync<User>(query, new { Email = email });
         }
+
+        public async Task<int> RegisterUserAsync(User user)
+        {
+            var query = "INSERT INTO Users (FullName, Email, PasswordHash, ApiKey, RoleId) VALUES (@FullName, @Email, @PasswordHash, @ApiKey, @RoleId)";
+            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            return await connection.ExecuteAsync(query, user);
+        }
+
     }
 }
