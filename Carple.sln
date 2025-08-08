@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35828.75 d17.13
+VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caple.API", "Caple\Caple.API.csproj", "{6899D1D8-BF3D-4F3F-8AB1-B3B7633D0C8F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carple.API", "Caple\Carple.API.csproj", "{6899D1D8-BF3D-4F3F-8AB1-B3B7633D0C8F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carple.Application", "Carple.Application\Carple.Application.csproj", "{81E087A6-3C70-4061-B951-E2ABCB082E6C}"
 EndProject

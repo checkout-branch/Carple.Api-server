@@ -6,46 +6,34 @@ using System.Text;
 public class ApiKeyValidationMiddleware
 {
     private readonly RequestDelegate _next;
+    private readonly ILogger<ApiKeyValidationMiddleware> _logger;
+    private const string API_KEY_HEADER = "x-api-key";
 
-    public ApiKeyValidationMiddleware(RequestDelegate next)
+    public ApiKeyValidationMiddleware(RequestDelegate next, ILogger<ApiKeyValidationMiddleware> logger)
     {
         _next = next;
+        _logger = logger;
     }
 
-    public async Task InvokeAsync(HttpContext context, IAuthRepo userRepo)
+    public async Task InvokeAsync(HttpContext context, IApiKeyService apiKeyService)
     {
-        if (context.Request.Path.StartsWithSegments("/api/auth/login") &&
-            context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+        if (!context.Request.Headers.TryGetValue(API_KEY_HEADER, out var extractedApiKey))
         {
-            context.Request.EnableBuffering();
+            _logger.LogWarning("API key missing");
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsync("API Key is missing.");
+            return;
+        }
 
-            using var reader = new StreamReader(context.Request.Body, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, leaveOpen: true);
-            var body = await reader.ReadToEndAsync();
-            context.Request.Body.Position = 0;
 
-            var loginDto = JsonSerializer.Deserialize<LoginDto>(body, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+        var isValid = await apiKeyService.ValidateKeyAsync(extractedApiKey!);
 
-            if (loginDto is not null)
-            {
-                var user = await userRepo.GetUserByEmailAsync(loginDto.Email);
-
-                if (user == null)
-                {
-                    context.Response.StatusCode = 401;
-                    await context.Response.WriteAsync("Unauthorized - User not found.");
-                    return;
-                }
-
-                if (string.IsNullOrEmpty(user.Apikey))
-                {
-                    context.Response.StatusCode = 401;
-                    await context.Response.WriteAsync("Unauthorized - API Key missing.");
-                    return;
-                }
-            }
+        if (!isValid)
+        {
+            _logger.LogWarning("Invalid API key attempt.");
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            await context.Response.WriteAsync("Invalid API Key.");
+            return;
         }
 
         await _next(context);

@@ -1,14 +1,23 @@
 using System.Text;
-using Caple.API.Middleware;
+using Carple.Infrastructure.Services;
 using Carple.Application.Interfaces;
+using Carple.Application.Settings;
 using Carple.Insfrastructure.Services;
 using Carple.Persistance.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Carple.API.Middleware;
 
+DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
+
+
+builder.Services.Configure<VaultSettings>(options =>
+{
+    options.ValidateUrl = Environment.GetEnvironmentVariable("Vault__ValidateUrl");
+});
 
 
 builder.Services.AddAuthentication(options =>
@@ -16,6 +25,8 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
+
+
 .AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -32,7 +43,11 @@ builder.Services.AddAuthentication(options =>
 // Add services to the container.
 
 builder.Services.AddScoped<IAuthRepo,AuthRepo>();
+
+
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddHttpClient<IApiKeyService, ApiKeyService>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -49,12 +64,20 @@ builder.Services.AddSwaggerGen(c =>
     // ?? Add JWT Bearer token support
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
+        Description = "Enter your JWT token only below. (no need of Bearer)",
         Name = "Authorization",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Description = "Enter 'Bearer' [space] and then your token.\n\nExample: Bearer eyJhbGciOiJIUzI1NiIsInR..."
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+    });
+
+    c.AddSecurityDefinition("ApiKey", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Description = "API Key needed to access endpoints. Enter your API key value here.",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Name = "X-API-KEY",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey
     });
 
     c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
@@ -66,6 +89,16 @@ builder.Services.AddSwaggerGen(c =>
                 {
                     Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
                     Id = "Bearer"
+                }
+            },
+            new string[] {}
+        },{
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "ApiKey"
                 }
             },
             new string[] {}
@@ -84,8 +117,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseMiddleware<ApiKeyValidationMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<ApiKeyValidationMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
