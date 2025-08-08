@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 
-namespace Caple.API.Middleware
+namespace Carple.API.Middleware
 {
     public class ExceptionHandlingMiddleware
     {

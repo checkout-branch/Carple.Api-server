@@ -3,7 +3,7 @@ using Carple.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Caple.API.Controllers
+namespace Carple.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -41,7 +41,7 @@ namespace Caple.API.Controllers
         [HttpGet("name")]
         public IActionResult Name()
         {
-            return Ok("");
+            return Ok("jhvjgkdce");
 
         }
         [HttpGet("throw-generic")]
