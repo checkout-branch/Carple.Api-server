@@ -1,7 +1,7 @@
 ﻿using Carple.Application.Dto;
-using Carple.Application.Interfaces;
 using System.Text.Json;
 using System.Text;
+using Carple.Application.Interfaces.Services;
 
 public class ApiKeyValidationMiddleware
 {

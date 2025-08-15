@@ -7,13 +7,13 @@ using Carple.Application.Dto;
 using Carple.Domain.Enities;
 using Carple.Domain.Entities;
 
-namespace Carple.Application.Interfaces
+namespace Carple.Application.Interfaces.Services
 {
-   public interface IAuthService
+    public interface IAuthService
     {
         Task<LoginResponseDto> LoginAsync(LoginDto dto);
 
-        Task<User?> GetUserByEmailAsync(string email);
+        Task<UserEntity?> GetUserByEmailAsync(string email);
         Task<string> RegisterAsync(RegisterDto dto);
     }
 }

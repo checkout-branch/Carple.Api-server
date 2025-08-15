@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Carple.Domain.Entities;
 
-namespace Carple.Application.Interfaces
+namespace Carple.Application.Interfaces.Repositories
 {
     public interface IReviewRepository
     {

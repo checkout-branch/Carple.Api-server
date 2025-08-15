@@ -1,4 +1,4 @@
-﻿using Carple.Application.Interfaces;
+﻿using Carple.Application.Interfaces.Services;
 using Carple.Application.Settings;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;

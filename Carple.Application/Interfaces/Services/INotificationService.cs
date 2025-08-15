@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Carple.Application.Common;
 using Carple.Domain.Enities;
 
-namespace Carple.Application.Interfaces
+namespace Carple.Application.Interfaces.Services
 {
     public interface INotificationService
     {

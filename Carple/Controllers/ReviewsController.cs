@@ -1,4 +1,4 @@
-﻿using Carple.Application.Interfaces;
+﻿using Carple.Application.Interfaces.Services;
 using Carple.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 

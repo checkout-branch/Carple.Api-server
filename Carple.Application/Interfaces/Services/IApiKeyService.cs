@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Carple.Application.Interfaces
+namespace Carple.Application.Interfaces.Services
 {
     public interface IApiKeyService
     {

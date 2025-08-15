@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Carple.Application.Interfaces;
+using Carple.Application.Interfaces.Repositories;
 using Carple.Domain.Enities;
 using Dapper;
 using Microsoft.Data.SqlClient;
