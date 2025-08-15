@@ -1,12 +1,14 @@
-using System.Text;
-using Carple.Infrastructure.Services;
-using Carple.Application.Interfaces;
+﻿using System.Text;
 using Carple.Application.Settings;
 using Carple.Insfrastructure.Services;
 using Carple.Persistance.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Carple.API.Middleware;
+using Carple.Application.Interfaces.Services;
+using Carple.Application.Interfaces.Repositories;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
@@ -42,11 +44,26 @@ builder.Services.AddAuthentication(options =>
 });
 // Add services to the container.
 
-builder.Services.AddScoped<IAuthRepo,AuthRepo>();
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
 
+// 2️⃣ Register IDbConnection as Scoped or Transient
+builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(connectionString));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpClient<IApiKeyService, ApiKeyService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IWalletService,  WalletService>();
+
+
+
+builder.Services.AddScoped<IAuthRepo,AuthRepo>();
+builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<INotificationRepository,NotificationRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+
 
 
 builder.Services.AddControllers();
@@ -118,7 +135,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseMiddleware<ApiKeyValidationMiddleware>();
+//app.UseMiddleware<ApiKeyValidationMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

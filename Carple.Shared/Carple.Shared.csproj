@@ -16,4 +16,8 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Carple.Application\Carple.Application.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,10 +1,10 @@
-﻿using Carple.Application.Interfaces;
+﻿using Carple.Application.Interfaces.Services;
 using Carple.Application.Settings;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using System.Text;
 
-namespace Carple.Infrastructure.Services
+namespace Carple.Insfrastructure.Services
 {
     public class ApiKeyService : IApiKeyService
     {

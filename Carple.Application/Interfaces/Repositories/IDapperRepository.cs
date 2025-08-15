@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Carple.Domain.Enities
+namespace Carple.Shared.Interfaces
 {
-    class Vehicle
+    internal interface IDapperRepository
     {
     }
 }
