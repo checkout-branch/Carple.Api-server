@@ -14,17 +14,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.18" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Middleware\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Carple.Application\Carple.Application.csproj" />
     <ProjectReference Include="..\Carple.Insfrastructure\Carple.Insfrastructure.csproj" />
+    <ProjectReference Include="..\Carple.Persistance\Carple.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

@@ -11,4 +11,13 @@
     <Folder Include="Results\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Carple.Application\Carple.Application.csproj" />
+  </ItemGroup>
+
 </Project>
