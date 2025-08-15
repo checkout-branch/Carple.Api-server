@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Data.Common;
 using Carple.Application.Interfaces.Repositories;
 using Carple.Domain.Entities;
 using Carple.Domain.Enums;
@@ -18,7 +19,12 @@ namespace Carple.Persistance.Repository
         private async Task EnsureConnectionAsync()
         {
             if (_db.State != ConnectionState.Open)
-                await _db.OpenAsync();
+            {
+                if (_db is DbConnection dbConn)
+                    await dbConn.OpenAsync();
+                else
+                    _db.Open();
+            }
         }
 
         public async Task<Wallet?> GetWalletByUserIdAsync(int userId)
