@@ -1,5 +1,4 @@
 using System.Text;
-using Carple.Infrastructure.Services;
 using Carple.Application.Interfaces;
 using Carple.Application.Settings;
 using Carple.Insfrastructure.Services;
@@ -47,8 +46,12 @@ builder.Services.AddScoped<IAuthRepo,AuthRepo>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddHttpClient<IApiKeyService, ApiKeyService>();
-
-
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<INotificationRepository,NotificationRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

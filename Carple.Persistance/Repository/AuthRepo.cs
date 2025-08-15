@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Carple.Application.Interfaces;
 using Carple.Domain.Enities;
+using Carple.Domain.Entities;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +27,9 @@ namespace Carple.Persistance.Repository
 
         public async Task<int> RegisterUserAsync(User user)
         {
-            var query = "INSERT INTO Users (FullName, Email, PasswordHash, ApiKey, RoleId) VALUES (@FullName, @Email, @PasswordHash, @ApiKey, @RoleId)";
+            //var query = "INSERT INTO Users (FullName, Email, PasswordHash, ApiKey, RoleId) VALUES (@FullName, @Email, @PasswordHash, @ApiKey, @RoleId)";
+            var query = "INSERT INTO Users (FullName, Email, PasswordHash, RoleId)  VALUES(@FullName, @Email, @PasswordHash, @RoleId)";
+
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             return await connection.ExecuteAsync(query, user);
         }

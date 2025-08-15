@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Carple.Application.Dto;
 using Carple.Domain.Enities;
+using Carple.Domain.Entities;
 
 namespace Carple.Application.Interfaces
 {

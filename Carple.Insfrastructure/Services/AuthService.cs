@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Carple.Application.Dto;
 using Carple.Application.Interfaces;
-using Carple.Domain.Enities;
+using Carple.Domain.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

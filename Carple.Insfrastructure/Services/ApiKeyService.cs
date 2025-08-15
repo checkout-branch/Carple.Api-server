@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using System.Text;
 
-namespace Carple.Infrastructure.Services
+namespace Carple.Insfrastructure.Services
 {
     public class ApiKeyService : IApiKeyService
     {

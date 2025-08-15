@@ -23,10 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Carple.Application\Carple.Application.csproj" />
     <ProjectReference Include="..\Carple.Insfrastructure\Carple.Insfrastructure.csproj" />
     <ProjectReference Include="..\Carple.Persistance\Carple.Persistance.csproj" />
