@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Carple.Domain.Enities
+namespace Carple.Domain.Entities
 {
     public class User
     {
