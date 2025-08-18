@@ -68,17 +68,17 @@ namespace Carple.Insfrastructure.Services
             if (userWallet.Balance < ride.ActualFare)
                 return new ApiResponse<string>(false, "Insufficient balance", null);
 
-            decimal companyShare = Math.Round(ride.ActualFare * 0.2m, 2);
-            decimal captainShare = ride.ActualFare - companyShare;
+            decimal companyShare = Math.Round(ride.ActualFare.Value * 0.2m, 2);
+            decimal captainShare = ride.ActualFare.Value - companyShare;
 
-            await _walletRepository.PerformWalletTransactionAsync(userWallet.WalletId, ride.ActualFare, TransactionType.Debit, $"Fare for Ride #{rideId}");
+            await _walletRepository.PerformWalletTransactionAsync(userWallet.WalletId, ride.ActualFare.Value, TransactionType.Debit, $"Fare for Ride #{rideId}");
             await _walletRepository.PerformWalletTransactionAsync(captainWallet.WalletId, captainShare, TransactionType.Credit, $"Earnings from Ride #{rideId}");
 
             Payment payment = new Payment
             {
                 RideId = rideId,
                 PaymentMethod = "Wallet",
-                Amount = ride.ActualFare,
+                Amount = ride.ActualFare.Value,
                 CompanyShare = companyShare,
                 CaptainShare = captainShare,
                 PaymentStatus = "Paid",

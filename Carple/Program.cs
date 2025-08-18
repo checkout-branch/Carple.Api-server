@@ -63,6 +63,14 @@ builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<INotificationRepository,NotificationRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IRideRepository, RideRepository>();
+builder.Services.AddScoped<IRideservice, RideService>();
+builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
+builder.Services.AddScoped<IPersonalDriverService, PersonalDriverService>();
+builder.Services.AddScoped<IPersonalDriverRepository, PersonalDriverRepository>();
+builder.Services.AddScoped<IRideJoinRequestRepository, RideJoinRequestRepository>();
+builder.Services.AddScoped<IRideJoinRequestService, RideJoinRequestService>();
 
 
 
