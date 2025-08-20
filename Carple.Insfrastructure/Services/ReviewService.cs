@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Carple.Application.Common;
-using Carple.Application.Interfaces;
+using Carple.Application.Interfaces.Repositories;
+using Carple.Application.Interfaces.Services;
 using Carple.Domain.Entities;
 
 namespace Carple.Insfrastructure.Services

@@ -6,12 +6,13 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Carple.Application.Dto;
-using Carple.Application.Interfaces;
 using Carple.Domain.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Dapper;
+using Carple.Application.Interfaces.Repositories;
+using Carple.Application.Interfaces.Services;
 namespace Carple.Insfrastructure.Services
 {
     public class AuthService : IAuthService

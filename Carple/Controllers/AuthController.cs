@@ -1,5 +1,5 @@
 ﻿using Carple.Application.Dto;
-using Carple.Application.Interfaces;
+using Carple.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,4 +1,4 @@
-﻿using Carple.Application.Interfaces;
+﻿using Carple.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carple.API.Controllers
