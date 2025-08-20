@@ -10,10 +10,14 @@ using Carple.Application.Interfaces.Repositories;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
+
 DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(connectionString));
 
 
 builder.Services.Configure<VaultSettings>(options =>
@@ -63,6 +67,14 @@ builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<INotificationRepository,NotificationRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IRideRepository, RideRepository>();
+builder.Services.AddScoped<IRideservice, RideService>();
+builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
+builder.Services.AddScoped<IPersonalDriverService, PersonalDriverService>();
+builder.Services.AddScoped<IPersonalDriverRepository, PersonalDriverRepository>();
+builder.Services.AddScoped<IRideJoinRequestRepository, RideJoinRequestRepository>();
+builder.Services.AddScoped<IRideJoinRequestService, RideJoinRequestService>();
 
 
 

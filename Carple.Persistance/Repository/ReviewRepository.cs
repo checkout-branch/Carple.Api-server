@@ -1,25 +1,22 @@
-﻿using System.Data;
-using Carple.Application.Interfaces.Repositories;
+using System.Data;
+using Carple.Application.Interfaces;
 using Carple.Domain.Entities;
 using Dapper;
 
 namespace Carple.Persistance.Repository
 {
-    public class ReviewRepository : IReviewRepository
+    public class ReviewRepository:IReviewRepository
     {
-        private readonly IDbConnection _db;
+        private readonly IDbConnection _dbConnection;
 
-        public ReviewRepository(IDbConnection db)
+        public ReviewRepository(IDbConnection dbConnection)
         {
-            _db = db;
+            _dbConnection = dbConnection;
         }
 
         public async Task<IEnumerable<Review>> GetAllAsync()
         {
-            if (_db.State != ConnectionState.Open)
-                _db.Open();
-
-            return await _db.QueryAsync<Review>(
+            return await _dbConnection.QueryAsync<Review>(
                 "ReviewMaster",
                 new { FLAG = 1 },
                 commandType: CommandType.StoredProcedure
@@ -28,10 +25,7 @@ namespace Carple.Persistance.Repository
 
         public async Task<Review?> GetByIdAsync(int reviewId)
         {
-            if (_db.State != ConnectionState.Open)
-                _db.Open();
-
-            return await _db.QueryFirstOrDefaultAsync<Review>(
+            return await _dbConnection.QueryFirstOrDefaultAsync<Review>(
                 "ReviewMaster",
                 new { FLAG = 2, ReviewId = reviewId },
                 commandType: CommandType.StoredProcedure
@@ -40,10 +34,7 @@ namespace Carple.Persistance.Repository
 
         public async Task<int> CreateAsync(Review review)
         {
-            if (_db.State != ConnectionState.Open)
-                _db.Open();
-
-            return await _db.ExecuteAsync(
+            return await _dbConnection.ExecuteAsync(
                 "ReviewMaster",
                 new
                 {
@@ -60,28 +51,32 @@ namespace Carple.Persistance.Repository
 
         public async Task<int> UpdateAsync(int reviewId, int rating, string? comment)
         {
-            if (_db.State != ConnectionState.Open)
-                _db.Open();
-
-            return await _db.ExecuteAsync(
+            return await _dbConnection.ExecuteAsync(
                 "ReviewMaster",
                 new { FLAG = 4, ReviewId = reviewId, Rating = rating, Comment = comment },
                 commandType: CommandType.StoredProcedure
             );
         }
 
+        //public async Task<bool> DeleteAsync(int reviewId)
+        //{
+        //    using var connection = new SqlConnection(_connectionString);
+        //    var rowsAffected = await connection.ExecuteAsync(
+        //        "ReviewMaster",
+        //        new { FLAG = 5, ReviewId = reviewId },
+        //        commandType: CommandType.StoredProcedure
+        //    );
+        //    return rowsAffected > 0;
+        //}
         public async Task<bool> DeleteAsync(int reviewId)
         {
-            if (_db.State != ConnectionState.Open)
-                _db.Open();
-
-            var result = await _db.QueryFirstOrDefaultAsync<int?>(
+            var result = await _dbConnection.QueryFirstOrDefaultAsync<int?>(
                 "ReviewMaster",
                 new { FLAG = 5, ReviewId = reviewId },
                 commandType: CommandType.StoredProcedure
             );
-
             return result.HasValue && result.Value == 1;
         }
+
     }
 }

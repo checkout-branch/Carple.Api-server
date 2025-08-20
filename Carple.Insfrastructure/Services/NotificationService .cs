@@ -39,16 +39,9 @@ namespace Carple.Insfrastructure.Services
             return new ApiResponse<string>(true, "Notification created successfully", null);
         }
 
-        //public async Task<ApiResponse<string>> MarkNotificationAsReadAsync(int notificationId)
-        //{
-        //    var success = await _notificationRepository.MarkAsReadAsync(notificationId);
-        //    if (!success)
-        //        return new ApiResponse<string>(false, "Notification not found", null);
-        //    return new ApiResponse<string>(true, "Notification marked as read", null);
-        //}
+       
         public async Task<ApiResponse<string>> MarkNotificationAsReadAsync(int notificationId)
         {
-            // Step 1: Get the notification first
             var notification = await _notificationRepository.GetByIdAsync(notificationId);
 
             if (notification == null)
@@ -57,7 +50,6 @@ namespace Carple.Insfrastructure.Services
             if (notification.IsRead)
                 return new ApiResponse<string>(true, "Notification already marked as read", null);
 
-            // Step 2: Mark as read
             var success = await _notificationRepository.MarkAsReadAsync(notificationId);
 
             if (!success)

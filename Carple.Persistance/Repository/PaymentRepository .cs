@@ -14,17 +14,15 @@ namespace Carple.Persistance.Repository
 {
     public class PaymentRepository : IPaymentRepository
     {
-        private readonly string _connectionString;
-
-        public PaymentRepository(IConfiguration configuration)
+        private readonly IDbConnection _dbConnection;
+       public PaymentRepository(IDbConnection dbConnection)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _dbConnection = dbConnection;
         }
 
         public async Task<IEnumerable<Payment>> GetAllAsync()
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.QueryAsync<Payment>(
+            return await _dbConnection.QueryAsync<Payment>(
                 "PaymentMaster",
                 new { FLAG = 1 },
                 commandType: CommandType.StoredProcedure
@@ -33,8 +31,7 @@ namespace Carple.Persistance.Repository
 
         public async Task<Payment?> GetByIdAsync(int paymentId)
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.QueryFirstOrDefaultAsync<Payment>(
+            return await _dbConnection.QueryFirstOrDefaultAsync<Payment>(
                 "PaymentMaster",
                 new { FLAG = 2, PaymentId = paymentId },
                 commandType: CommandType.StoredProcedure
@@ -43,8 +40,7 @@ namespace Carple.Persistance.Repository
 
         public async Task<int> CreateAsync(Payment payment)
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.ExecuteAsync(
+            return await _dbConnection.ExecuteAsync(
                 "PaymentMaster",
                 new
                 {
