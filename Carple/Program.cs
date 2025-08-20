@@ -10,10 +10,14 @@ using Carple.Application.Interfaces.Repositories;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
+
 DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(connectionString));
 
 
 builder.Services.Configure<VaultSettings>(options =>
