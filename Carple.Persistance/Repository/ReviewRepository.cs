@@ -14,17 +14,16 @@ namespace Carple.Persistance.Repository
 {
     public class ReviewRepository:IReviewRepository
     {
-        private readonly string _connectionString;
+        private readonly IDbConnection _dbConnection;
 
-        public ReviewRepository(IConfiguration configuration)
+        public ReviewRepository(IDbConnection dbConnection)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _dbConnection = dbConnection;
         }
 
         public async Task<IEnumerable<Review>> GetAllAsync()
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.QueryAsync<Review>(
+            return await _dbConnection.QueryAsync<Review>(
                 "ReviewMaster",
                 new { FLAG = 1 },
                 commandType: CommandType.StoredProcedure
@@ -33,8 +32,7 @@ namespace Carple.Persistance.Repository
 
         public async Task<Review?> GetByIdAsync(int reviewId)
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.QueryFirstOrDefaultAsync<Review>(
+            return await _dbConnection.QueryFirstOrDefaultAsync<Review>(
                 "ReviewMaster",
                 new { FLAG = 2, ReviewId = reviewId },
                 commandType: CommandType.StoredProcedure
@@ -43,8 +41,7 @@ namespace Carple.Persistance.Repository
 
         public async Task<int> CreateAsync(Review review)
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.ExecuteAsync(
+            return await _dbConnection.ExecuteAsync(
                 "ReviewMaster",
                 new
                 {
@@ -61,8 +58,7 @@ namespace Carple.Persistance.Repository
 
         public async Task<int> UpdateAsync(int reviewId, int rating, string? comment)
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.ExecuteAsync(
+            return await _dbConnection.ExecuteAsync(
                 "ReviewMaster",
                 new { FLAG = 4, ReviewId = reviewId, Rating = rating, Comment = comment },
                 commandType: CommandType.StoredProcedure
@@ -81,8 +77,7 @@ namespace Carple.Persistance.Repository
         //}
         public async Task<bool> DeleteAsync(int reviewId)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var result = await connection.QueryFirstOrDefaultAsync<int?>(
+            var result = await _dbConnection.QueryFirstOrDefaultAsync<int?>(
                 "ReviewMaster",
                 new { FLAG = 5, ReviewId = reviewId },
                 commandType: CommandType.StoredProcedure

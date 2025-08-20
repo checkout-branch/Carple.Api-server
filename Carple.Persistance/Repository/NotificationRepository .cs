@@ -14,17 +14,15 @@ namespace Carple.Persistance.Repository
 {
     public class NotificationRepository : INotificationRepository
     {
-        private readonly string _connectionString;
-
-        public NotificationRepository(IConfiguration configuration)
+        private readonly IDbConnection _dbConnection;
+        public NotificationRepository(IDbConnection dbConnection)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _dbConnection = dbConnection;
         }
 
         public async Task<IEnumerable<Notification>> GetAllAsync()
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.QueryAsync<Notification>(
+            return await _dbConnection.QueryAsync<Notification>(
                 "NotificationMaster",
                 new { FLAG = 1 },
                 commandType: CommandType.StoredProcedure
@@ -33,8 +31,7 @@ namespace Carple.Persistance.Repository
 
         public async Task<Notification?> GetByIdAsync(int notificationId)
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.QueryFirstOrDefaultAsync<Notification>(
+            return await _dbConnection.QueryFirstOrDefaultAsync<Notification>(
                 "NotificationMaster",
                 new { FLAG = 2, NotificationId = notificationId },
                 commandType: CommandType.StoredProcedure
@@ -43,49 +40,48 @@ namespace Carple.Persistance.Repository
 
         public async Task<int> CreateAsync(int userId, int? captainId, string message, string notificationType)
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.ExecuteAsync(
+            return await _dbConnection.ExecuteAsync(
                 "NotificationMaster",
                 new { FLAG = 3, UserId = userId, CaptainId = captainId, Message = message, NotificationType = notificationType },
                 commandType: CommandType.StoredProcedure
             );
         }
 
+
         //public async Task<bool> MarkAsReadAsync(int notificationId)
         //{
-        //    using var connection = new SqlConnection(_connectionString);
-        //    var rowsAffected = await connection.ExecuteAsync(
-        //        "NotificationMaster",
-        //        new { FLAG = 4, NotificationId = notificationId },
-        //        commandType: CommandType.StoredProcedure
-        //    );
-        //    return rowsAffected > 0;
+
+        //    try
+        //    {
+        //        await _dbConnection.ExecuteAsync(
+        //            "NotificationMaster",
+        //            new { FLAG = 4, NotificationId = notificationId },
+        //            commandType: CommandType.StoredProcedure
+        //        );
+
+        //        // If no exception from SP, it's a success
+        //        return true;
+        //    }
+        //    catch (SqlException ex)
+        //    {
+        //        // Check for your SP's "not found" error code
+        //        if (ex.Message.Contains("Invalid NotificationId"))
+        //        {
+        //            return false; // ID doesn't exist
+        //        }
+
+        //        throw; // Other DB error
+        //    }
         //}
         public async Task<bool> MarkAsReadAsync(int notificationId)
         {
-            using var connection = new SqlConnection(_connectionString);
+            var rowsAffected = await _dbConnection.ExecuteAsync(
+                "NotificationMaster",
+                new { FLAG = 4, NotificationId = notificationId },
+                commandType: CommandType.StoredProcedure
+            );
 
-            try
-            {
-                await connection.ExecuteAsync(
-                    "NotificationMaster",
-                    new { FLAG = 4, NotificationId = notificationId },
-                    commandType: CommandType.StoredProcedure
-                );
-
-                // If no exception from SP, it's a success
-                return true;
-            }
-            catch (SqlException ex)
-            {
-                // Check for your SP's "not found" error code
-                if (ex.Message.Contains("Invalid NotificationId"))
-                {
-                    return false; // ID doesn't exist
-                }
-
-                throw; // Other DB error
-            }
+            return rowsAffected > 0;
         }
 
     }

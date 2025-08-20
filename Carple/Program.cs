@@ -6,11 +6,16 @@ using Carple.Persistance.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Carple.API.Middleware;
+using System.Data;
+using Microsoft.Data.SqlClient;
 
 DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(connectionString));
 
 
 builder.Services.Configure<VaultSettings>(options =>
